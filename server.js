@@ -16,8 +16,8 @@ const app = express();
 const db = new Database('data.db');
 
 // VAPID keys (ضع مفاتيحك هنا أو في env)
-const VAPID_PUBLIC_KEY = 'BDU7qjby3RjTS4nbt3Ego6wC2xFoxH4v6nRnylq2gCzGEHkD7HSkLkrTESX4mFBuWue1Bu6aLj4gjgzfP1p0A';
-const VAPID_PRIVATE_KEY = 'hHy3T9WyEz4bC8hQdJp0uxTmYq1iIx2EVQFsnmJvBMo';
+const VAPID_PUBLIC_KEY = 'BI4OQcLXP6vpFytihCey_PyEkzkPsEBIPyBEjpe8SXIqQsRl70jPsqZUoeBa0ljVgGruhS4PAPMyNUCkdrGMyN4';
+const VAPID_PRIVATE_KEY = '2RM4bMbHJtx_oyim4vgBoruCQKguuF9v5kaSwkRxt3Q';
 
 if (VAPID_PUBLIC_KEY === 'PUT_YOUR_PUBLIC_KEY_HERE') {
   console.warn('تحذير: لم تضبط مفاتيح VAPID بعد. Push Notifications لن تعمل حتى تضبطها.');
