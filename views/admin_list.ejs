@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title || 'لوحة التحكم' %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#e0e5ec" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header neu-surface">
+      <div class="header-left">
+        <div class="header-title">لوحة التحكم – إدارة خطوط الاتصال</div>
+        <div class="header-subtitle">
+          تفاصيل كاملة + تجديد + إضافة + تعديل + حذف (للمدير فقط).
+        </div>
+      </div>
+      <div class="header-right">
+        <a href="/" class="neu-button small">الواجهة العامة</a>
+        <form action="/logout" method="post" style="display:inline;">
+          <button type="submit" class="neu-button small">تسجيل الخروج</button>
+        </form>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <% if (error && error.length) { %>
+        <div class="alert alert-error neu-surface">
+          <% error.forEach(function(msg) { %><div><%= msg %></div><% }); %>
+        </div>
+      <% } %>
+
+      <% if (success && success.length) { %>
+        <div class="alert alert-success neu-surface">
+          <% success.forEach(function(msg) { %><div><%= msg %></div><% }); %>
+        </div>
+      <% } %>
+
+      <div class="toolbar-row">
+        <div class="summary-row small">
+          <div class="summary-card neu-surface">
+            <div class="summary-label">إجمالي</div>
+            <div class="summary-value"><%= stats.total %></div>
+          </div>
+          <div class="summary-card neu-surface">
+            <div class="summary-label">فعّالة</div>
+            <div class="summary-value"><%= stats.active %></div>
+          </div>
+          <div class="summary-card neu-surface">
+            <div class="summary-label">ستنتهي خلال ٧ أيام</div>
+            <div class="summary-value"><%= stats.soon %></div>
+          </div>
+          <div class="summary-card neu-surface">
+            <div class="summary-label">منتهية</div>
+            <div class="summary-value"><%= stats.expired %></div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <a href="/admin/lines/new" class="neu-button primary">إضافة خط جديد</a>
+          <a href="/admin/import" class="neu-button">استيراد CSV</a>
+          <form action="/admin/notify-expiring" method="post" style="display:inline;">
+            <button type="submit" class="neu-button">إرسال إشعار للمنتهية/القريبة</button>
+          </form>
+        </div>
+      </div>
+
+      <section class="lines-section neu-surface">
+        <h2 class="section-title">الخطوط</h2>
+        <% if (!lines.length) { %>
+          <p class="empty-state">لا توجد خطوط مسجلة بعد.</p>
+        <% } else { %>
+          <div class="lines-list admin">
+            <% lines.forEach(function(line) { %>
+              <div class="line-card neu-surface">
+                <div class="line-header">
+                  <div>
+                    <div class="line-name"><%= line.person_name %></div>
+                    <div class="line-job">
+                      <%= line.job_title || '—' %> – <%= line.workplace || '—' %>
+                    </div>
+                  </div>
+                  <% if (line.status === 'ACTIVE') { %>
+                    <span class="badge badge-active">فعّال</span>
+                  <% } else if (line.status === 'EXPIRING_SOON') { %>
+                    <span class="badge badge-soon">سينتهي خلال ٧ أيام</span>
+                  <% } else if (line.status === 'EXPIRED') { %>
+                    <span class="badge badge-expired">منتهي</span>
+                  <% } %>
+                </div>
+
+                <div class="line-meta">
+                  <div>📱 <b><%= line.phone_number %></b></div>
+                  <div>💰 الباقة: <%= line.package_amount ? line.package_amount + ' د.ع' : '—' %></div>
+                  <div>⏰ انتهاء: <%= line.expiry_date || '—' %></div>
+                  <div>📅 إضافة: <%= line.created_at || '—' %></div>
+                </div>
+
+                <div class="line-footer">
+                  <form action="/admin/lines/<%= line.id %>/renew" method="post" style="display:inline;">
+                    <button type="submit" class="neu-button primary">تجديد شهر</button>
+                  </form>
+                  <a href="/admin/lines/<%= line.id %>/edit" class="neu-button">تعديل</a>
+                  <form action="/admin/lines/<%= line.id %>/delete" method="post" style="display:inline;" onsubmit="return confirm('هل أنت متأكد من حذف هذا الخط؟');">
+                    <button type="submit" class="neu-button danger">حذف</button>
+                  </form>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        <% } %>
+      </section>
+    </main>
+  </div>
+
+  <script src="/push-client.js"></script>
+</body>
+</html>

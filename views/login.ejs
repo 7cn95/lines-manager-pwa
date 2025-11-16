@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title || 'تسجيل الدخول' %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#e0e5ec" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header neu-surface">
+      <div class="header-left">
+        <div class="header-title">إدارة خطوط الاتصال</div>
+        <div class="header-subtitle">تسجيل الدخول للوحة التحكم</div>
+      </div>
+      <div class="header-right">
+        <a href="/" class="neu-button small">الواجهة العامة</a>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <% if (error && error.length) { %>
+        <div class="alert alert-error neu-surface">
+          <% error.forEach(function(msg) { %>
+            <div><%= msg %></div>
+          <% }); %>
+        </div>
+      <% } %>
+
+      <div class="card neu-surface">
+        <h1 class="card-title">تسجيل الدخول</h1>
+        <form action="/login" method="post" class="form-grid single">
+          <div class="form-group">
+            <label for="username">اسم المستخدم</label>
+            <input id="username" name="username" type="text" class="neu-input" required />
+          </div>
+          <div class="form-group">
+            <label for="password">كلمة المرور</label>
+            <input id="password" name="password" type="password" class="neu-input" required />
+          </div>
+          <button type="submit" class="neu-button primary">دخول</button>
+          <p class="small-help">
+            المستخدم الافتراضي (db.js): <b>admin / admin123</b> – غيّرها بعد أول تشغيل.
+          </p>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="/push-client.js"></script>
+</body>
+</html>

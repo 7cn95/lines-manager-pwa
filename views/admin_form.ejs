@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title || 'خط' %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#e0e5ec" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header neu-surface">
+      <div class="header-left">
+        <div class="header-title"><%= title %></div>
+        <div class="header-subtitle">إدارة بيانات الخط.</div>
+      </div>
+      <div class="header-right">
+        <a href="/admin" class="neu-button small">العودة للوحة التحكم</a>
+        <form action="/logout" method="post" style="display:inline;">
+          <button type="submit" class="neu-button small">تسجيل الخروج</button>
+        </form>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <% if (error && error.length) { %>
+        <div class="alert alert-error neu-surface">
+          <% error.forEach(function(msg) { %><div><%= msg %></div><% }); %>
+        </div>
+      <% } %>
+
+      <div class="card neu-surface">
+        <h1 class="card-title"><%= title %></h1>
+        <form
+          action="<%= mode === 'edit' ? '/admin/lines/' + line.id : '/admin/lines' %>"
+          method="post"
+          class="form-grid"
+        >
+          <div class="form-group">
+            <label for="person_name">اسم الشخص</label>
+            <input
+              id="person_name"
+              name="person_name"
+              type="text"
+              class="neu-input"
+              value="<%= line.person_name || '' %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="phone_number">رقم الهاتف</label>
+            <input
+              id="phone_number"
+              name="phone_number"
+              type="text"
+              class="neu-input"
+              value="<%= line.phone_number || '' %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="job_title">العنوان الوظيفي</label>
+            <input
+              id="job_title"
+              name="job_title"
+              type="text"
+              class="neu-input"
+              value="<%= line.job_title || '' %>"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="workplace">مكان العمل</label>
+            <input
+              id="workplace"
+              name="workplace"
+              type="text"
+              class="neu-input"
+              value="<%= line.workplace || '' %>"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="package_amount">مبلغ الباقة (د.ع)</label>
+            <input
+              id="package_amount"
+              name="package_amount"
+              type="number"
+              min="0"
+              step="1000"
+              class="neu-input"
+              value="<%= line.package_amount || '' %>"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="expiry_date">تاريخ انتهاء الباقة</label>
+            <input
+              id="expiry_date"
+              name="expiry_date"
+              type="date"
+              class="neu-input"
+              value="<%= line.expiry_date || '' %>"
+              required
+            />
+          </div>
+
+          <button type="submit" class="neu-button primary">
+            <%= mode === 'edit' ? 'تحديث' : 'حفظ' %>
+          </button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="/push-client.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title || 'الخطوط الحالية' %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#e0e5ec" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header neu-surface">
+      <div class="header-left">
+        <div class="header-title">إدارة خطوط الاتصال</div>
+        <div class="header-subtitle">
+          واجهة عامة: عرض الأسماء والأرقام والعناوين الوظيفية وأماكن العمل فقط.
+        </div>
+      </div>
+      <div class="header-right">
+        <a href="/login" class="neu-button small">تسجيل الدخول</a>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <div class="summary-row">
+        <div class="summary-card neu-surface">
+          <div class="summary-label">إجمالي الخطوط</div>
+          <div class="summary-value"><%= stats.total %></div>
+        </div>
+        <div class="summary-card neu-surface">
+          <div class="summary-label">فعّالة</div>
+          <div class="summary-value"><%= stats.active %></div>
+        </div>
+        <div class="summary-card neu-surface">
+          <div class="summary-label">ستنتهي خلال ٧ أيام</div>
+          <div class="summary-value"><%= stats.soon %></div>
+        </div>
+        <div class="summary-card neu-surface">
+          <div class="summary-label">منتهية</div>
+          <div class="summary-value"><%= stats.expired %></div>
+        </div>
+      </div>
+
+      <section class="lines-section neu-surface">
+        <h2 class="section-title">قائمة الخطوط</h2>
+        <% if (!lines.length) { %>
+          <p class="empty-state">لا توجد خطوط مسجلة بعد.</p>
+        <% } else { %>
+          <div class="lines-list">
+            <% lines.forEach(function(line) { %>
+              <div class="line-card neu-surface">
+                <div class="line-header">
+                  <div>
+                    <div class="line-name"><%= line.person_name %></div>
+                    <div class="line-job"><%= line.job_title || '—' %></div>
+                  </div>
+                  <% if (line.status === 'ACTIVE') { %>
+                    <span class="badge badge-active">فعّال</span>
+                  <% } else if (line.status === 'EXPIRING_SOON') { %>
+                    <span class="badge badge-soon">سينتهي قريبًا</span>
+                  <% } else if (line.status === 'EXPIRED') { %>
+                    <span class="badge badge-expired">منتهي</span>
+                  <% } %>
+                </div>
+                <div class="line-meta">
+                  <div>📱 <b><%= line.phone_number %></b></div>
+                  <div>🏢 <%= line.workplace || '—' %></div>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        <% } %>
+      </section>
+    </main>
+  </div>
+
+  <script src="/push-client.js"></script>
+</body>
+</html>
